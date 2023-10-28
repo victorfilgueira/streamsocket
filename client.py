@@ -14,6 +14,8 @@ client_socket.connect((SERVER_IP, SERVER_PORT))
 def register_client(name, ip, port):
     message = f"REGISTER {name} {ip} {port}"
     client_socket.send(message.encode())
+    response = client_socket.recv(1024).decode()
+    return response
 
 # Função para consultar um cliente por nome
 def search_client(name):
@@ -26,9 +28,11 @@ def search_client(name):
 def disconnect():
     message = "DISCONNECT"
     client_socket.send(message.encode())
+    response = client_socket.recv(1024).decode()
+    return response
 
 while True:
-    print("Menu:")
+    print("\nMenu:")
     print("1. Registrar-se")
     print("2. Consultar")
     print("3. Desconectar")
@@ -40,7 +44,8 @@ while True:
         name = input("Insira o nome do cliente: ")
         ip = input("Insira o IP do cliente: ")
         port = input("Insira a porta do cliente: ")
-        register_client(name, ip, port)
+        result = register_client(name, ip, port)
+        print(result)
     
     elif choice == "2":
         name = input("Insira o nome do cliente para consulta: ")
@@ -48,8 +53,8 @@ while True:
         print("Resposta do servidor:", result)
     
     elif choice == "3":
-        disconnect()
-        print("Desconectado do servidor.")
+        result = disconnect()
+        print(result)
     
     elif choice == "4":
         break
