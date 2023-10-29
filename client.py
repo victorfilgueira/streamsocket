@@ -50,7 +50,7 @@ while True:
     elif choice == "2":
         name = input("Insira o nome do cliente para consulta: ")
         result = search_client(name)
-        print("Resposta do servidor:", result)
+        print(result)
     
     elif choice == "3":
         result = disconnect()

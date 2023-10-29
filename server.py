@@ -15,7 +15,7 @@ server_socket.bind((SERVER_IP, SERVER_PORT))
 # Start listening for connections
 server_socket.listen(5)
 
-print(f"Iniciando o servidor em {SERVER_IP}:{SERVER_PORT}\n")
+print(f"...Servidor iniciado em {SERVER_IP}:{SERVER_PORT}\n")
 
 # Table of client information
 client_table = {}
@@ -33,9 +33,9 @@ def handle_client(client_socket):
 
         if command == "REGISTER":
             name, ip, port = parts[1], parts[2], parts[3]
-            if name not in client_table:
+            if name not in client_table and all(client[0] != ip for client in client_table.values()):
                 client_table[name] = (ip, port)
-                print("CLIENTE REGISTRADO COM SUCESSO!\n")
+                print(f'\nCLIENTE "{name}" REGISTRADO COM SUCESSO!\n')
                 client_socket.send("\nREGISTRADO COM SUCESSO!\n".encode())
                 print(client_table)
             else:
@@ -45,7 +45,7 @@ def handle_client(client_socket):
             name = parts[1]
             if name in client_table:
                 ip, port = client_table[name]
-                response = f"Nome: {name}, IP: {ip}, Porta: {port}\n"
+                response = f"\nNome: {name}, IP: {ip}, Porta: {port}\n"
                 client_socket.send(response.encode())
             else:
                 client_socket.send("\nCLIENTE NÃO ENCONTRADO!".encode())
@@ -62,7 +62,7 @@ def handle_client(client_socket):
 def quit_server():
     global server_running
     while True:
-        option = input("Pressione 'q' e Enter a qualquer momento para encerrar o servidor... \n")
+        option = input()
         if option.lower() == 'q':
             print("Encerrando o servidor...\n")
             server_running = False
